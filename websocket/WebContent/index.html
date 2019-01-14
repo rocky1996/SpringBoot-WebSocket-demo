@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script type="text/javascript">
+			
+			var ws;//一个ws对象就是一个通信的管道
+			var target = "ws:localhost:8080/websocket/echo";
+			function subObject(){
+				if("WebSocket" in window){
+					ws = new WebSocket(target);
+				}else if("MozWebSocket" in window){
+					ws = new MozWebSocket(target);
+				}else{
+					alert("WebSocket is not supported by this browser!!!");
+					return;
+				}
+				
+				ws.onmessage = function(event){
+					var dv = document.getElementById("dv");
+					dv.innerHTML = event.data;
+				};
+				
+			}
+			
+			function subSend(){
+				var msg = document.getElementById("msg").value;
+				ws.send(msg);
+				
+				document.getElementById("msg").value="";
+			}
+		</script>
+	</head>
+	<body>
+		<button onclick="subObject();">open</button>
+		<input id="msg"/><button onclick="subSend();">send</button>
+		<div id="dv">
+		</div>
+	</body>
+</html>
